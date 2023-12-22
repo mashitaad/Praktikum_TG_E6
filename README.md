@@ -70,8 +70,10 @@ Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” 
 - Batalkan langkah dan coba langkah lainnya.
 - Jika tidak ada langkah yang mungkin, kembalikan false.
 
+
 ### Penjelasan Singkat Permasalahan Dengan Heuristic
 Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” dan dapat diselesaikan menggunakan algoritma backtracking dan heuristic. Heuristik adalah pendekatan berbasis aturan atau pengetahuan yang digunakan untuk memandu pencarian solusi dengan tujuan meningkatkan efisiensi. Dalam konteks tur kuda catur, heuristik dapat digunakan untuk memandu pemilihan langkah pertama yang lebih mungkin mengarah ke solusi akhir. Heuristik tidak menjamin solusi optimal, tetapi dapat mengurangi kompleksitas pencarian.
+
 
 ### Penyelesaian Praktikum 2 Dengan Backtracking
 Berikut adalah snippet kode Python yang mengimplementasikan algoritma backtracking untuk menyelesaikan masalah Knight's Tour:
@@ -210,6 +212,11 @@ def visualize_knight_tour(board):
     # ...
 ```
 Fungsi ini menggunakan Matplotlib untuk membuat visualisasi dari solusi tur kuda catur pada papan 8x8. Menunjukkan langkah-langkah kuda dan jalur tur kuda dengan warna kuning.
+
+#### Visualisasi Knight Tour Backtracking
+
+![backtracking](https://github.com/mashitaad/Praktikum_TG_E6/assets/87978863/75cd6eb3-17ca-42c6-9e1d-23dacc7006cb)
+
 
 ### Penyelesaian Praktikum 2 Dengan Heuristic
 Berikut adalah snippet kode Python yang mengimplementasikan algoritma heuristic untuk menyelesaikan masalah Knight’s Tour:
