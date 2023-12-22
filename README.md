@@ -16,8 +16,9 @@ Dokumentasi Praktikum 1 dan 2 Mata Kuliah Teori Graf oleh Kelompok 6
   - [Penjelasan Singkat LMIS](#penjelasan-singkat-LMIS)
   - [Penyelesain](#penyelesaian-praktikum-1)
 - [Praktikum 2](#praktikum-2)
-  - [Penjelasan Singkat Permasalahan](#penjelasan-singkat-permasalahan)
-  - [Penyelesain Praktikum 2](#penyelesaian-praktikum-2)
+  - [Penjelasan Singkat Permasalahan Dengan Backtracking](#penjelasan-singkat-permasalahan-dengan-backtracking)
+  - [Penjelasan Singkat Permasalahan Dengan Heuristic](#penjelasan-singkat-permasalahan-dengan-heuristic)
+  - [Penyelesain Praktikum 2 Dengan Heuristic](#penyelesaian-praktikum-2-dengan-heuristic)
 - [Referensi](#referensi)
  
 ## Praktikum 1
@@ -58,8 +59,8 @@ Implementasi di atas menggunakan pendekatan Binary Search untuk mencari subseque
 ### Soal Praktikum 2
 > Jika sebuah bidak kuda diletakkan pada sebarang kotak untuk kemudian melakukan perjalanan (dengan cara pergerakan kuda) mengunjungi ke semua (8x8) kotak papan catur. Jika diinginkan situasi bahwa kuda tsb dapat mengakhiri perjalnaan pada attacking square, mengakhiri perjalanan di sebarang kotak. Maka aplikasikan algoritma untuk menyelesaikan masalah diatas ke dalam sebuah program dengan menunjukkan rute perjanlanan seperti gambar kanan bawah
 
-### Penjelasan Singkat Permasalahan
-Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” dan dapat diselesaikan menggunakan algoritma backtracking. Algoritma backtracking adalah teknik rekursif yang digunakan untuk menyelesaikan masalah optimasi. Ini mencoba untuk membangun solusi secara inkremental, satu bagian pada satu waktu, sambil mempertimbangkan batasan masalah. Berikut adalah algoritma backtracking untuk menyelesaikan masalah Knight’s Tour:
+### Penjelasan Singkat Permasalahan Dengan Backtracking
+Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” dan dapat diselesaikan menggunakan algoritma backtracking dan heuristic. Algoritma backtracking adalah teknik rekursif yang digunakan untuk menyelesaikan masalah optimasi. Ini mencoba untuk membangun solusi secara inkremental, satu bagian pada satu waktu, sambil mempertimbangkan batasan masalah. Berikut adalah algoritma backtracking untuk menyelesaikan masalah Knight’s Tour:
 - Mulai dari kotak awal.
 - Jika semua kotak telah dikunjungi, kembalikan true.
 - Untuk setiap langkah yang mungkin dari kotak saat ini, lakukan langkah berikutnya.
@@ -67,8 +68,149 @@ Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” 
 - Batalkan langkah dan coba langkah lainnya.
 - Jika tidak ada langkah yang mungkin, kembalikan false.
 
-### Penyelesaian Praktikum 2
-Berikut adalah contoh kode Python yang mengimplementasikan algoritma backtracking untuk menyelesaikan masalah Knight’s Tour:
+### Penjelasan Singkat Permasalahan Dengan Backtracking
+Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” dan dapat diselesaikan menggunakan algoritma backtracking dan heuristic. Heuristik adalah pendekatan berbasis aturan atau pengetahuan yang digunakan untuk memandu pencarian solusi dengan tujuan meningkatkan efisiensi. Dalam konteks tur kuda catur, heuristik dapat digunakan untuk memandu pemilihan langkah pertama yang lebih mungkin mengarah ke solusi akhir. Heuristik tidak menjamin solusi optimal, tetapi dapat mengurangi kompleksitas pencarian.
+
+### Penyelesaian Praktikum 2 Dengan Backtracking
+Berikut adalah snippet kode Python yang mengimplementasikan algoritma backtracking untuk menyelesaikan masalah Knight's Tour:
+
+```ruby
+import matplotlib.pyplot as plt
+import numpy as np
+
+def isSafe(x, y, board, N):
+    return x >= 0 and y >= 0 and x < N and y < N and board[x][y] == -1
+
+def printSolution(board, N):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end=' ')
+        print()
+
+def solveKT():
+    N = 8 
+    board = [[-1 for _ in range(N)] for _ in range(N)]
+    move_x = [2, 1, -1, -2, -2, -1, 1, 2]
+    move_y = [1, 2, 2, 1, -1, -2, -2, -1]
+    board[0][0] = 0
+    pos = 1
+    if not solveKTUtil(board, 0, 0, move_x, move_y, pos, N):
+        print("Solution does not exist")
+    else:
+        return board  
+
+def solveKTUtil(board, curr_x, curr_y, move_x, move_y, pos, N):
+    if pos == N * N:
+        return True
+    for i in range(8):
+        new_x = curr_x + move_x[i]
+        new_y = curr_y + move_y[i]
+        if isSafe(new_x, new_y, board, N):
+            board[new_x][new_y] = pos
+            if solveKTUtil(board, new_x, new_y, move_x, move_y, pos + 1, N):
+                return True
+            board[new_x][new_y] = -1
+    return False
+
+solution_board = solveKT()
+
+def visualize_knight_tour(board):
+    N = len(board)
+    chessboard = np.array(board)
+    pair_array = np.zeros((N * N, 2), dtype=int)
+
+    fig, ax = plt.subplots()
+    ax.set_xticks(np.arange(0.5, N, 1))
+    ax.set_yticks(np.arange(0.5, N, 1))
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.grid(which="both")
+    ax.imshow(chessboard, cmap="plasma")  
+
+    for i in range(N):
+        for j in range(N):
+            if chessboard[i, j] != -1:
+                ax.text(j, i, str(chessboard[i, j]), ha="center", va="center", fontsize=8)
+                pair_array[chessboard[i, j] - 1] = (j, i)
+
+    for k in range(len(pair_array) - 1):
+        j, i = pair_array[k]
+        next_j, next_i = pair_array[k + 1]
+        ax.plot([j, next_j], [i, next_i], color='yellow')  
+
+    plt.show()
+
+visualize_knight_tour(solution_board)
+```
+
+Berikut adalah penjelasan singkat dari setiap fungsi dalam program kami:
+
+#### Fungsi isSafe(x, y, board, N)
+```ruby
+def isSafe(x, y, board, N):
+    return x >= 0 and y >= 0 and x < N and y < N and board[x][y] == -1
+```
+Fungsi ini memeriksa apakah langkah yang diinginkan (x, y) aman untuk dilewati. Langkah dikatakan aman jika koordinat berada di dalam batas papan dan belum dikunjungi.
+
+#### Fungsi printSolution(board, N)
+```ruby
+def printSolution(board, N):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end=' ')
+        print()
+```
+Fungsi ini mencetak solusi pada papan catur. Fungsi ini tidak digunakan dalam program ini, tetapi dapat digunakan untuk mencetak solusi ke konsol.
+
+#### Fungsi solveKT()
+```ruby
+def solveKT():
+    N = 8 
+    board = [[-1 for _ in range(N)] for _ in range(N)]
+    move_x = [2, 1, -1, -2, -2, -1, 1, 2]
+    move_y = [1, 2, 2, 1, -1, -2, -2, -1]
+    board[0][0] = 0
+    pos = 1
+    if not solveKTUtil(board, 0, 0, move_x, move_y, pos, N):
+        print("Solution does not exist")
+    else:
+        return board
+```
+Fungsi ini melakukan inisialisasi papan catur, mendefinisikan gerakan langkah kuda `(move_x dan move_y)`, menetapkan posisi awal kuda, dan memanggil fungsi utilitas `solveKTUtil`.
+
+#### Fungsi solveKTUtil()
+```ruby
+def solveKTUtil(board, curr_x, curr_y, move_x, move_y, pos, N):
+    if pos == N * N:
+        return True
+    for i in range(8):
+        new_x = curr_x + move_x[i]
+        new_y = curr_y + move_y[i]
+        if isSafe(new_x, new_y, board, N):
+            board[new_x][new_y] = pos
+            if solveKTUtil(board, new_x, new_y, move_x, move_y, pos + 1, N):
+                return True
+            board[new_x][new_y] = -1
+    return False
+```
+Fungsi utilitas ini merupakan implementasi rekursif dari algoritma backtracking untuk menyelesaikan masalah tur kuda catur. Jika langkah yang diambil membawa ke solusi, fungsi akan mengembalikan True, dan sebaliknya.
+
+#### Visualisasi Solusi dengan visualize_knight_tour(board)
+```ruby
+solution_board = solveKT()
+visualize_knight_tour(solution_board)
+```
+Program memanggil fungsi `solveKT` untuk mendapatkan solusi dan kemudian memvisualisasikan solusi tersebut dengan menggunakan fungsi `visualize_knight_tour`.
+
+#### Fungsi visualize_knight_tour(board)
+```ruby
+def visualize_knight_tour(board):
+    # ...
+```
+Fungsi ini menggunakan Matplotlib untuk membuat visualisasi dari solusi tur kuda catur pada papan 8x8. Menunjukkan langkah-langkah kuda dan jalur tur kuda dengan warna kuning.
+
+### Penyelesaian Praktikum 2 Dengan Heuristic
+Berikut adalah snippet kode Python yang mengimplementasikan algoritma heuristic untuk menyelesaikan masalah Knight’s Tour:
 
 ```ruby
 import matplotlib.pyplot as plt
