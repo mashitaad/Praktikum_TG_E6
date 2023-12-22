@@ -18,6 +18,7 @@ Dokumentasi Praktikum 1 dan 2 Mata Kuliah Teori Graf oleh Kelompok 6
 - [Praktikum 2](#praktikum-2)
   - [Penjelasan Singkat Permasalahan Dengan Backtracking](#penjelasan-singkat-permasalahan-dengan-backtracking)
   - [Penjelasan Singkat Permasalahan Dengan Heuristic](#penjelasan-singkat-permasalahan-dengan-heuristic)
+  - [Penyelesain Praktikum 2 Dengan Backtracking](#penyelesaian-praktikum-2-dengan-backtracking)
   - [Penyelesain Praktikum 2 Dengan Heuristic](#penyelesaian-praktikum-2-dengan-heuristic)
 - [Referensi](#referensi)
  
