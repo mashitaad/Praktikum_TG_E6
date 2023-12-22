@@ -68,7 +68,7 @@ Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” 
 - Batalkan langkah dan coba langkah lainnya.
 - Jika tidak ada langkah yang mungkin, kembalikan false.
 
-### Penjelasan Singkat Permasalahan Dengan Backtracking
+### Penjelasan Singkat Permasalahan Dengan Heuristic
 Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” dan dapat diselesaikan menggunakan algoritma backtracking dan heuristic. Heuristik adalah pendekatan berbasis aturan atau pengetahuan yang digunakan untuk memandu pencarian solusi dengan tujuan meningkatkan efisiensi. Dalam konteks tur kuda catur, heuristik dapat digunakan untuk memandu pemilihan langkah pertama yang lebih mungkin mengarah ke solusi akhir. Heuristik tidak menjamin solusi optimal, tetapi dapat mengurangi kompleksitas pencarian.
 
 ### Penyelesaian Praktikum 2 Dengan Backtracking
