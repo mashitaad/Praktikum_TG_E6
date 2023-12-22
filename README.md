@@ -327,6 +327,11 @@ if __name__ == '__main__':
 ```
 Program utama yang mencoba menghasilkan tur kuda catur yang menutupi seluruh papan. Loop ini terus berjalan hingga tur berhasil dibuat.
 
+#### Visualisasi Knight Tour Heuristic
+
+![heuristic](https://github.com/mashitaad/Praktikum_TG_E6/assets/87978863/e2d5dbd8-659c-439d-854d-e4eb28048687)
+
+
 ## Referensi
 ### Referensi Soal Praktikum 1
 - [sushiljacksparrow/Python_Practice](https://github.com/sushiljacksparrow/Python_Practice/blob/e59e4dae227d60b5b93f4f8371c287cc1fa41450/longest_bitonic_susequence.py)
