@@ -71,50 +71,110 @@ Berdasarkan soal masalah tersebut dikenal sebagai “Knight’s Tour Problem” 
 Berikut adalah contoh kode Python yang mengimplementasikan algoritma backtracking untuk menyelesaikan masalah Knight’s Tour:
 
 ```ruby
-def isSafe(x, y, board):
-    if(x >= 0 and y >= 0 and x < N and y < N and board[x][y] == -1):
-        return True
-    return False
+import matplotlib.pyplot as plt
+import numpy as np
 
-def printSolution(board):
-    for i in range(N):
-        for j in range(N):
-            print(board[i][j], end = ' ')
-        print()
+BOARD_SIZE = 8
+MOVES = [(1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
 
-def solveKT():
-    board = [[-1 for i in range(N)]for i in range(N)]
-    move_x = [2, 1, -1, -2, -2, -1, 1, 2]
-    move_y = [1, 2, 2, 1, -1, -2, -2, -1]
-    board[0][0] = 0
-    pos = 1
-    if(not solveKTUtil(board, 0, 0, move_x, move_y, pos)):
-        print("Solution does not exist")
-    else:
-        printSolution(board)
+def is_within_board(x, y):
+    return (0 <= x < BOARD_SIZE) and (0 <= y < BOARD_SIZE)
 
-def solveKTUtil(board, curr_x, curr_y, move_x, move_y, pos):
-    if(pos == N*N):
-        return True
-    for i in range(8):
-        new_x = curr_x + move_x[i]
-        new_y = curr_y + move_y[i]
-        if(isSafe(new_x, new_y, board)):
-            board[new_x][new_y] = pos
-            if(solveKTUtil(board, new_x, new_y, move_x, move_y, pos+1)):
-                return True
-            board[new_x][new_y] = -1
-    return False
+def generate_closed_tour():
+    board = np.full((BOARD_SIZE, BOARD_SIZE), -1)
+    x, y = 4, 0
+    board[y][x] = 1
 
-N = 8
-solveKT()
+    for step in range(2, BOARD_SIZE ** 2 + 1):
+        possible_moves = []
+        for dx, dy in MOVES:
+            new_x, new_y = x + dx, y + dy
+            if is_within_board(new_x, new_y) and board[new_y][new_x] == -1:
+                move_count = sum(
+                    is_within_board(new_x + mx, new_y + my) and board[new_y + my][new_x + mx] == -1
+                    for mx, my in MOVES
+                )
+                possible_moves.append((move_count, (new_x, new_y)))
+
+        if not possible_moves:
+            return False
+
+        x, y = min(possible_moves)[1]
+        board[y][x] = step
+
+    visualize_knights_tour(board)
+    return True
+
+def visualize_knights_tour(board):
+    fig, ax = plt.subplots()
+    ax.set_xticks(np.arange(0.5, BOARD_SIZE, 1))
+    ax.set_yticks(np.arange(0.5, BOARD_SIZE, 1))
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.grid(which="both")
+    ax.imshow(board, cmap="plasma")
+
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            if board[i][j] != -1:
+                ax.text(j, i, str(board[i][j]), ha="center", va="center", fontsize=8)
+
+    pair_array = np.zeros((BOARD_SIZE * BOARD_SIZE, 2), dtype=int)
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            if board[i][j] != -1:
+                pair_array[board[i][j] - 1] = (j, i)
+
+    for k in range(len(pair_array) - 1):
+        j, i = pair_array[k]
+        next_j, next_i = pair_array[k + 1]
+        ax.plot([j, next_j], [i, next_i], color='yellow')
+
+    plt.show()
+
+if __name__ == '__main__':
+    while not generate_closed_tour():
+        pass
 ```
 
 Berikut adalah penjelasan singkat dari setiap fungsi dalam program kami:
-- `isSafe(x, y, board)` Fungsi ini memeriksa apakah langkah yang diambil oleh kuda masih berada di dalam papan catur dan kotak tersebut belum pernah dikunjungi sebelumnya.
-- `printSolution(board)` Fungsi ini mencetak solusi Knight’s Tour pada papan 8x8. Setiap kotak yang dikunjungi akan dicetak dengan nomor langkah yang sesuai.
-- `solveKT()` Fungsi ini menginisialisasi papan catur, daftar langkah kuda, dan memanggil fungsi solveKTUtil() untuk menyelesaikan masalah Knight’s Tour.
-- `solveKTUtil(board, curr_x, curr_y, move_x, move_y, pos)` Fungsi ini menggunakan algoritma backtracking untuk menyelesaikan masalah Knight’s Tour. Fungsi ini mencoba   setiap kemungkinan langkah kuda dan memeriksa apakah langkah tersebut mengarah ke solusi. Jika solusi ditemukan, fungsi akan mengembalikan True. Jika tidak, fungsi akan mencoba langkah lainnya.
+
+#### Inisialisasi Konstanta dan Gerakan (Moves)
+```ruby
+BOARD_SIZE = 8
+MOVES = [(1, 2), (1, -2), (2, 1), (2, -1), (-1, 2), (-1, -2), (-2, 1), (-2, -1)]
+```
+- `BOARD_SIZE` Menyimpan ukuran papan catur (8x8).
+- `MOVES` Menyimpan semua kemungkinan gerakan kuda catur dalam bentuk perubahan koordinat.
+
+#### Fungsi is_within_board
+```ruby
+def is_within_board(x, y):
+    return (0 <= x < BOARD_SIZE) and (0 <= y < BOARD_SIZE)
+```
+Fungsi ini memeriksa apakah suatu koordinat berada dalam batas papan catur.
+
+#### Fungsi generate_closed_tour
+```ruby
+def generate_closed_tour():
+    # ...
+```
+Fungsi ini mencoba menghasilkan tur kuda catur yang menutupi seluruh papan. Jika berhasil, fungsi akan memanggil visualize_knights_tour untuk menampilkan hasilnya.
+
+#### Fungsi visualize_knights_tour
+```ruby
+def visualize_knights_tour(board):
+    # ...
+```
+Fungsi ini memvisualisasikan tur kuda catur pada papan menggunakan Matplotlib. Koordinat dan urutan gerakan ditampilkan di atas papan, dan jalur tur dihubungkan dengan garis kuning.
+
+#### Loop Utama
+```ruby
+if __name__ == '__main__':
+    while not generate_closed_tour():
+        pass
+```
+Program utama yang mencoba menghasilkan tur kuda catur yang menutupi seluruh papan. Loop ini terus berjalan hingga tur berhasil dibuat.
 
 ## Referensi
 ### Referensi Soal Praktikum 1
