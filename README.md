@@ -14,8 +14,9 @@ Dokumentasi Praktikum 1 dan 2 Mata Kuliah Teori Graf oleh Kelompok 6
 - [Praktikum 1](#praktikum-1)
   - [Soal](#soal-praktikum-1)
   - [Penjelasan Singkat LMIS](#penjelasan-singkat-LMIS)
-  - [Penyelesain](#penyelesaian-praktikum-1)
+  - [Penyelesaian Praktikum 1](#penyelesaian-praktikum-1)
 - [Praktikum 2](#praktikum-2)
+  - [Soal](#soal-praktikum-2) 
   - [Penjelasan Singkat Permasalahan Dengan Backtracking](#penjelasan-singkat-permasalahan-dengan-backtracking)
   - [Penjelasan Singkat Permasalahan Dengan Heuristic](#penjelasan-singkat-permasalahan-dengan-heuristic)
   - [Penyelesain Praktikum 2 Dengan Backtracking](#penyelesaian-praktikum-2-dengan-backtracking)
@@ -38,23 +39,69 @@ Berikut adalah implementasi algoritma LIS menggunakan bahasa pemrograman Python 
 from bisect import bisect_left
 
 def lengthOfLIS(nums):
-    n = len(nums)
     ans = [nums[0]]
-    for i in range(1, n):
+
+    for i in range(1, len(nums)):
         if nums[i] > ans[-1]:
             ans.append(nums[i])
         else:
             low = bisect_left(ans, nums[i])
             ans[low] = nums[i]
-    return len(ans)
 
-nums = [10, 22, 9, 33, 21, 50, 41, 60]
-print("Length of LIS is", lengthOfLIS(nums))
+    return len(ans), ans
+
+nums_input = input("Enter a list of numbers separated by spaces: ")
+nums = list(map(int, nums_input.split()))
+
+length, lis_elements = lengthOfLIS(nums)
+
+print("Input from user:", nums)
+print("Length of LIS is", length)
+print("The LIS elements are", lis_elements)
 ```
 
-Implementasi di atas menggunakan pendekatan Binary Search untuk mencari subsequence terpanjang. Algoritma ini mempertahankan daftar “bucket” yang merepresentasikan subsequence yang valid. Daftar ini awalnya kosong dan diiterasi dari kiri ke kanan. Untuk setiap nomor dalam daftar, dilakukan langkah-langkah berikut:
-- Jika nomor tersebut lebih besar dari elemen terakhir dari bucket terakhir (yaitu elemen terbesar dalam subsequence saat ini), maka nomor tersebut ditambahkan ke akhir daftar. Hal ini menunjukkan bahwa kita telah menemukan subsequence yang lebih panjang.
-- Jika tidak, dilakukan pencarian biner pada daftar bucket untuk menemukan elemen terkecil yang lebih besar dari atau sama dengan nomor saat ini. Langkah ini membantu kita mempertahankan sifat elemen yang meningkat dalam bucket. Setelah menemukan posisi untuk diperbarui, elemen tersebut diganti dengan nomor saat ini. Hal ini menjaga bucket tetap terurut dan memastikan bahwa kita memiliki potensi untuk subsequence yang lebih panjang di masa depan 1.
+Berikut adalah penjelasan singkat dari program di atas:
+
+```ruby
+def lengthOfLIS(nums):
+    ans = [nums[0]]
+
+    # ...
+
+    return len(ans), ans
+```
+
+Fungsi lengthOfLIS mengambil list bilangan `nums` sebagai input dan mengembalikan dua nilai, yaitu panjang dari Longest Increasing Subsequence (LIS) dan juga LIS itu sendiri. Fungsi ini menginisialisasikan array `ans` dengan bilangan pertama (indeks ke-0) dari `nums`.
+
+```ruby
+for i in range(1, len(nums)):
+    if nums[i] > ans[-1]:
+        ans.append(nums[i])
+    else:
+        low = bisect_left(ans, nums[i])
+        ans[low] = nums[i]
+```
+
+For loop ini mengiterasi setiap bilangan dari input list mulai dari bilangan kedua (indeks ke-1). Apabila bilangan sekarang ini (`nums[i]`) lebih besar daripada bilangan sebelumnya (`ans[-1]`), maka bilangan tersebut akan ditambahkan ke dalam LIS. 
+
+Sedangkan jika bilangan sekarang lebih kecil daripada bilangan sebelumnya, maka dilakukan binary search (`bisect_left`) untuk mencari indeks di mana bilangan tersebut dapat dimasukkan ke dalam `ans` dengan tetap mempertahankan urutannya. Iterasi ini akan terus dilakukan untuk seluruh bilangan pada array `nums`.
+
+```ruby
+nums_input = input("Enter a list of numbers separated by spaces: ")
+nums = list(map(int, nums_input.split()))
+
+length, lis_elements = lengthOfLIS(nums)
+```
+
+Bagian ini meminta user untuk memasukkan list bilangan yang diinginkan (`nums_input`) dalam bentuk string yang kemudian akan diubah menjadi list integer (`nums`). Fungsi `lengtOfLIS` kemudian dipanggil dengan input `nums` dan akan mengembalikan panjang serta isi dari LIS yang akan disimpan di dalam variabel `length` serta `lis_elements`. 
+
+```ruby
+print("Input from user:", nums)
+print("Length of LIS is", length)
+print("The LIS elements are", lis_elements)
+```
+
+Terakhir, program akan menampilkan list input yang dimasukkan oleh user, panjang dari LIS, dan juga isi dari LIS yang telah dibentuk.
 
 ## Praktikum 2
 
