@@ -33,75 +33,111 @@ Dokumentasi Praktikum 1 dan 2 Mata Kuliah Teori Graf oleh Kelompok 6
 “Largest Monotonically Increasing Subsequence” adalah subsequence terpanjang dari suatu sequence yang elemen-elemennya meningkat secara monotonik. Untuk menyelesaikan permasalahan ini, kita dapat menggunakan algoritma Longest Increasing Subsequence (LIS) dengan kompleksitas waktu `O(N log N)` 
 
 ### Penyelesaian Praktikum 1
-Berikut adalah implementasi algoritma LIS menggunakan bahasa pemrograman Python yang telah kami buat:
+Berikut adalah implementasi algoritma LMIS menggunakan bahasa pemrograman Python yang telah kami buat:
 
 ```ruby
-from bisect import bisect_left
+def LMIS(nums):
+    n = len(nums)
+    if n == 0:
+        return 0, []
 
-def lengthOfLIS(nums):
-    ans = [nums[0]]
+    # Initialize an array to store the length of the longest increasing subsequence
+    lis_length = [1] * n
 
-    for i in range(1, len(nums)):
-        if nums[i] > ans[-1]:
-            ans.append(nums[i])
-        else:
-            low = bisect_left(ans, nums[i])
-            ans[low] = nums[i]
+    # Initialize an array to store the LMIS
+    lis_list = [[num] for num in nums]
 
-    return len(ans), ans
+    # Perform dynamic programming to find the LMIS
+    for i in range(1, n):
+        for j in range(0, i):
+            if nums[i] > nums[j] and lis_length[i] < lis_length[j] + 1:
+                lis_length[i] = lis_length[j] + 1
+                lis_list[i] = lis_list[j] + [nums[i]]
 
-nums_input = input("Enter a list of numbers separated by spaces: ")
-nums = list(map(int, nums_input.split()))
+    # Find the maximum length of the LMIS
+    max_lmis_index = lis_length.index(max(lis_length))
+    max_lmis = lis_list[max_lmis_index]
 
-length, lis_elements = lengthOfLIS(nums)
+    return max_lmis
 
-print("Input from user:", nums)
-print("Length of LIS is", length)
-print("The LIS elements are", lis_elements)
+# User input for the list of numbers
+user_input = input("Enter a list of numbers separated by spaces: ")
+nums = list(map(int, user_input.split()))
+
+# Calculate and display the LMIS
+lmis = LMIS(nums)
+print("Length of LMIS is", len(lmis))
+print("Longest Monotonically Increasing Subsequence (LMIS):", lmis)
 ```
 
 Berikut adalah penjelasan singkat dari program di atas:
 
 ```ruby
-def lengthOfLIS(nums):
-    ans = [nums[0]]
+def LMIS(nums):
 
-    # ...
+# ...
 
-    return len(ans), ans
+    return max_lmis
 ```
 
-Fungsi lengthOfLIS mengambil list bilangan `nums` sebagai input dan mengembalikan dua nilai, yaitu panjang dari Longest Increasing Subsequence (LIS) dan juga LIS itu sendiri. Fungsi ini menginisialisasikan array `ans` dengan bilangan pertama (indeks ke-0) dari `nums`.
+Fungsi LMIS mengambil list bilangan `nums` sebagai input dan mengembalikan tuple yang berisi panjang dari LMIS dan LMIS itu sendiri.
 
 ```ruby
-for i in range(1, len(nums)):
-    if nums[i] > ans[-1]:
-        ans.append(nums[i])
-    else:
-        low = bisect_left(ans, nums[i])
-        ans[low] = nums[i]
+n = len(nums)
+if n == 0:
+    return 0, []
 ```
 
-For loop ini mengiterasi setiap bilangan dari input list mulai dari bilangan kedua (indeks ke-1). Apabila bilangan sekarang ini (`nums[i]`) lebih besar daripada bilangan sebelumnya (`ans[-1]`), maka bilangan tersebut akan ditambahkan ke dalam LIS. 
-
-Sedangkan jika bilangan sekarang lebih kecil daripada bilangan sebelumnya, maka dilakukan binary search (`bisect_left`) untuk mencari indeks di mana bilangan tersebut dapat dimasukkan ke dalam `ans` dengan tetap mempertahankan urutannya. Iterasi ini akan terus dilakukan untuk seluruh bilangan pada array `nums`.
+Bagian ini akan mengecek apakah list input kosong atau tidak. Jika kosong, maka fungsi LMIS akan mengembalikan tuple `(0, [])` yang berarti panjang LMIS adalah 0 dan LMIS tersebut merupakan sebuah list kosong.
 
 ```ruby
-nums_input = input("Enter a list of numbers separated by spaces: ")
-nums = list(map(int, nums_input.split()))
+lis_length = [1] * n
 
-length, lis_elements = lengthOfLIS(nums)
+lis_list = [[num] for num in nums]
 ```
 
-Bagian ini meminta user untuk memasukkan list bilangan yang diinginkan (`nums_input`) dalam bentuk string yang kemudian akan diubah menjadi list integer (`nums`). Fungsi `lengtOfLIS` kemudian dipanggil dengan input `nums` dan akan mengembalikan panjang serta isi dari LIS yang akan disimpan di dalam variabel `length` serta `lis_elements`. 
+Di sini, dua buah array diinisialisasi:
+- `lis_length`: Array untuk menyimpan panjang dari subsequence terpanjang pada tiap index. Pada awalnya array ini diisi dengan bilangan 1 dengan panjang yang sama seperti input list.
+- `lis_list`: Array dari kumpulan array untuk menyimpan subsequences yang sesuai dengan tiap index. Setiap elemen lis_list ini awalnya berupa list tunggal yang berisi bilangan sesuai list input.
 
 ```ruby
-print("Input from user:", nums)
-print("Length of LIS is", length)
-print("The LIS elements are", lis_elements)
+for i in range(1, n):
+    for j in range(0, i):
+        if nums[i] > nums[j] and lis_length[i] < lis_length[j] + 1:
+            lis_length[i] = lis_length[j] + 1
+            lis_list[i] = lis_list[j] + [nums[i]]
 ```
 
-Terakhir, program akan menampilkan list input yang dimasukkan oleh user, panjang dari LIS, dan juga isi dari LIS yang telah dibentuk.
+For loop ini menggunakan *dynamic programming* untuk menemukan LMIS. Iterasi akan dilakukan untuk setiap pasangan indeks i dan j, di mana i > j.
+
+Jika bilangan pada indeks i lebih besar dari bilangan pada indeks j dan panjang LMIS yang berakhir pada indeks i lebih kecil dari panjang LMIS yang berakhir pada indeks j ditambah satu, maka panjang dan subsequence pada indeks i diperbarui.
+
+```ruby
+max_lmis_index = lis_length.index(max(lis_length))
+max_lmis = lis_list[max_lmis_index]
+```
+
+Kemudian, program akan mencari indeks dengan panjang LMIS terbesar (`max_lmis_index`) dan juga elemen dari LMIS tersebut (`max_lmis`).
+
+```ruby
+user_input = input("Enter a list of numbers separated by spaces: ")
+nums = list(map(int, user_input.split()))
+
+lmis = LMIS(nums)
+```
+
+Bagian ini meminta input dari user berupa list bilangan yang dipisahkan oleh spasi (`user_input`). Input yang berbentuk string ini akan diubah menjadi list integer (`nums`). Fungsi LMIS dipanggil dengan list input dan nilai yang dikembalikan (panjang dan LMIS) disimpan dalam variabel `lmis`.
+
+```ruby
+print("Length of LMIS is", len(lmis))
+print("Longest Monotonically Increasing Subsequence (LMIS):", lmis)
+```
+
+Terakhir, panjang dan elemen dari LMIS yang telah diperoleh akan ditampilkan.
+
+### Hasil
+
+![image](https://github.com/mashitaad/Praktikum_TG_E6/assets/90295688/ff6c788e-0cfd-4b6b-9653-f04f133630c9)
 
 ## Praktikum 2
 

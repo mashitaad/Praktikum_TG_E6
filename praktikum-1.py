@@ -1,22 +1,32 @@
-from bisect import bisect_left
+def LMIS(nums):
+    n = len(nums)
+    if n == 0:
+        return 0, []
 
-def lengthOfLIS(nums):
-    ans = [nums[0]]
+    # Initialize an array to store the length of the longest increasing subsequence
+    lis_length = [1] * n
 
-    for i in range(1, len(nums)):
-        if nums[i] > ans[-1]:
-            ans.append(nums[i])
-        else:
-            low = bisect_left(ans, nums[i])
-            ans[low] = nums[i]
+    # Initialize an array to store the LMIS
+    lis_list = [[num] for num in nums]
 
-    return len(ans), ans
+    # Perform dynamic programming to find the LMIS
+    for i in range(1, n):
+        for j in range(0, i):
+            if nums[i] > nums[j] and lis_length[i] < lis_length[j] + 1:
+                lis_length[i] = lis_length[j] + 1
+                lis_list[i] = lis_list[j] + [nums[i]]
 
-nums_input = input("Enter a list of numbers separated by spaces: ")
-nums = list(map(int, nums_input.split()))
+    # Find the maximum length of the LMIS
+    max_lmis_index = lis_length.index(max(lis_length))
+    max_lmis = lis_list[max_lmis_index]
 
-length, lis_elements = lengthOfLIS(nums)
+    return max_lmis
 
-print("Input from user:", nums)
-print("Length of LIS is", length)
-print("The LIS elements are", lis_elements)
+# User input for the list of numbers
+user_input = input("Enter a list of numbers separated by spaces: ")
+nums = list(map(int, user_input.split()))
+
+# Calculate and display the LMIS
+lmis = LMIS(nums)
+print("Length of LMIS is", len(lmis))
+print("Longest Monotonically Increasing Subsequence (LMIS):", lmis)
