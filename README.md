@@ -415,6 +415,15 @@ Program utama yang mencoba menghasilkan tur kuda catur yang menutupi seluruh pap
 ![heuristic](https://github.com/mashitaad/Praktikum_TG_E6/assets/87978863/e2d5dbd8-659c-439d-854d-e4eb28048687)
 
 
+### Analisis
+Berdasarkan kedua pendeketan yang kami lakukan yaitu dengan Backtracking dan Heuristic. Berikut kesimpulan yang kami dapatkan :
+|          Pendekatan          |          Waktu Eksekusi          |        Jenis        |
+| :--------------------------: | :------------------------------: |:------------------: |
+|         Backtracking         |           16,58 second           |      Close Tour     |
+|         Heuristic            |           2,64 second            |      Open Tour      |
+
+Dari hasil ini, dapat disimpulkan bahwa implementasi heuristik lebih cepat daripada pendekatan backtracking untuk mencari tur knight yang ditutup dalam kasus tertentu. Heuristik memanfaatkan informasi lokal untuk membuat keputusan, sementara backtracking mencoba setiap kemungkinan secara sistematis.
+
 ## Referensi
 ### Referensi Soal Praktikum 1
 - [sushiljacksparrow/Python_Practice](https://github.com/sushiljacksparrow/Python_Practice/blob/e59e4dae227d60b5b93f4f8371c287cc1fa41450/longest_bitonic_susequence.py)
